@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slider and Input Sync</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .container {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <label for="value-input">Value (0-360): </label>
+      <input type="number" id="value-input" min="0" max="360" value="0" />
+    </div>
+
+    <div class="container">
+      <label for="value-slider">Slider: </label>
+      <input type="range" id="value-slider" min="0" max="360" value="180" />
+    </div>
+
+    <div class="container">
+      <label>Common Values: </label>
+      <label><input type="radio" name="common-value" value="0" /> 0</label>
+      <label><input type="radio" name="common-value" value="45" /> 45</label>
+      <label><input type="radio" name="common-value" value="60" /> 60</label>
+      <label><input type="radio" name="common-value" value="90" /> 90</label>
+      <label><input type="radio" name="common-value" value="180" /> 180</label>
+    </div>
+
+    <script>
+      const inputBox = document.getElementById("value-input");
+      const slider = document.getElementById("value-slider");
+      const radioButtons = document.querySelectorAll(
+        'input[name="common-value"]'
+      );
+
+      function syncValue(value) {
+        value = Math.max(0, Math.min(360, value)); // Constrain value between 0 and 360
+        inputBox.value = value;
+        slider.value = value;
+        radioButtons.forEach((radio) => {
+          radio.checked = radio.value == value;
+        });
+      }
+
+      inputBox.addEventListener("input", (e) => syncValue(e.target.value));
+      slider.addEventListener("input", (e) => syncValue(e.target.value));
+      radioButtons.forEach((radio) => {
+        radio.addEventListener("change", (e) => syncValue(e.target.value));
+      });
+
+      syncValue(0); // Initialize the synchronization
+    </script>
+  </body>
+</html>
